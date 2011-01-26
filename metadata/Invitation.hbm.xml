@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping package="org.openmrs.module.ejemplomedellin">
+
+<class name="Invitation" table="ejemplomedellin_invitation">
+
+    <id
+        name="id"
+        type="int"
+        column="id"
+        unsaved-value="0"
+    >
+        <generator class="native" />
+    </id>
+
+    <property
+        name="dateCreated"
+        type="java.util.Date"
+        column="date_created"
+        not-null="true"
+        length="19"
+    />
+
+    <many-to-one
+        name="patient"
+        column="patient_id"
+        class="org.openmrs.Patient"
+        not-null="true"
+    />
+    
+    <many-to-one
+        name="provider"
+        column="provider_id"
+        class="org.openmrs.User"
+        not-null="true"
+    />
+
+    <property
+        name="acceptedByPatient"
+        type="java.lang.Boolean"
+        column="accepted_by_patient"
+        length="1"
+        not-null="true"
+    />
+
+    <property
+        name="acceptedByProvider"
+        type="java.lang.Boolean"
+        column="accepted_by_provider"
+        length="1"
+        not-null="true"
+    />
+    
+</class>
+</hibernate-mapping>
