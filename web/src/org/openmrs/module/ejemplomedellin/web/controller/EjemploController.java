@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.ejemplomedellin.web.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.openmrs.Person;
@@ -24,6 +23,8 @@ import org.openmrs.User;
 import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.ejemplomedellin.ProviderService;
+import org.openmrs.notification.Message;
+import org.openmrs.notification.MessageException;
 import org.openmrs.util.OpenmrsConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,7 +63,26 @@ public class EjemploController {
 		rel.setRelationshipType(relType);
 		Context.getPersonService().saveRelationship(rel);
 		
+		Message email = new Message();
+		email.addRecipient("djazayeri@gmail.com");
+		email.setSubject("Invitiation");
+		email.setContent("You have been invited to share a medical record with " + currentUser.getPersonName().getFullName());
+		try {
+			Context.getMessageService().sendMessage(email);
+		} catch (MessageException ex) {
+			throw new RuntimeException("Failed to send message", ex);
+		}
+		
 		return "redirect:inviteProvider.form";
+	}
+	
+	@RequestMapping("/module/ejemplomedellin/checkIfUserExists")
+	public String checkIfUserExists(@RequestParam("username") String username,
+	                                Model model) {
+		User u = Context.getUserService().getUserByUsername(username);
+		String jsonReturnValue = u == null ? "{ \"exists\" : \"false\" }" : "{ \"exists\" : \"true\" }";
+		model.addAttribute("json", jsonReturnValue);
+		return "/module/ejemplomedellin/json";
 	}
 	
 }

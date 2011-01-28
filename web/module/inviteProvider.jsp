@@ -25,4 +25,41 @@ Invite a new provider to view your record:
 
 </form>
 
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+<openmrs:htmlInclude file="/dwr/engine.js" />
+<!-- <openmrs:htmlInclude file="/dwr/util.js" /> -->
+<openmrs:htmlInclude file="/dwr/interface/DWRExample.js" />
+
+<script>
+$j(document).ready(function() {
+    $j('#username').change(function() {
+    	DWRExample.userExists($j('#username').val(), function(data) {
+    		if (data)
+    			$j('#username-error').html('Already in use!');
+            else
+                $j('#username-error').html('Okay');
+    	});
+    	
+    	/*
+    	String ajaxUrl = 'checkIfUserExists.form?username=' + $j('#username').val();
+    	$j.getJSON(ajaxUrl, function(data) {
+    	    if (data.exists == 'true')
+    	    	$j('#username-error').html('Already in use!');
+    	    else
+    	    	$j('#username-error').html('Okay');
+    	});
+    	*/
+    })
+});
+</script>
+
+<input type="text" id="username"/>
+<span id="username-error"></span>
+
 <%@ include file="/WEB-INF/template/footer.jsp"%>
