@@ -15,27 +15,32 @@ package org.openmrs.module.ejemplomedellin;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.module.Activator;
+import org.openmrs.PersonAttributeType;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.BaseModuleActivator;
 
 /**
  * This class contains the logic that is run every time this module is either started or shutdown
  */
-public class EjemploMedellinActivator implements Activator {
+public class EjemploMedellinActivator extends BaseModuleActivator {
 	
 	private Log log = LogFactory.getLog(this.getClass());
-	
+
 	/**
-	 * @see org.openmrs.module.Activator#startup()
-	 */
-	public void startup() {
-		log.info("Starting Ejemplo Medellin Module");
-	}
-	
-	/**
-	 * @see org.openmrs.module.Activator#shutdown()
-	 */
-	public void shutdown() {
-		log.info("Shutting down Ejemplo Medellin Module");
-	}
+     * @see org.openmrs.module.BaseModuleActivator#started()
+     */
+    @Override
+    public void started() {
+    	// create a PersonAttributeType for citizenship if it does not already exist
+    	PersonAttributeType citizenship = Context.getPersonService().getPersonAttributeTypeByName("citizenship");
+    	if (citizenship == null) {
+    		citizenship = new PersonAttributeType();
+    		citizenship.setName("citizenship");
+    		citizenship.setDescription("the person's nationality");
+    		citizenship.setFormat("java.lang.String");
+    		Context.getPersonService().savePersonAttributeType(citizenship);
+    	}
+    	VitalboxConstants.CITIZENSHIP_UUID = citizenship.getUuid();
+    }
 	
 }

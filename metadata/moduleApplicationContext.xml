@@ -49,5 +49,14 @@
 	    </property>
 	</bean>
 
+    <!-- 
+    <bean class="org.openmrs.web.taglib.fieldgen.FieldGenHandlerFactory">
+        <property name="handlers">
+            <props>
+                <prop key="...">...</prop>
+            </props>
+        </property>
+    </bean>
+    -->
 
 </beans>
